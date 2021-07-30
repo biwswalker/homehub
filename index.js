@@ -1,3 +1,4 @@
+require('dotenv').config()
 const axios = require('axios')
 
 // get id
@@ -7,19 +8,20 @@ const axios = require('axios')
 const BRIDGE_IP = process.env.BRIDGE_IP
 const USERNAME = process.env.USERNAME_ID
 
-
-// Lumion 10
-https://drive.google.com/file/d/1Hf5M-Jh5an11ornwifkIeOh-COsPzZj0/view?usp=sharing
-https://drive.google.com/file/d/1-WAMT3GvKM3u2Zx6K23bkL5nnJqDPPKc/view?usp=sharing
-https://drive.google.com/file/d/1iQLyA_y6Gswcx7crnVWqyGAVYF_UzoZD/view?usp=sharing
-
-
-const controlLight = async (lightId, on = false, bri = 254, ct = 156) => {
+const controlLight = async (lightId, on = false, bri = 254) => {
     const uri = `http://${BRIDGE_IP}/api/${USERNAME}/lights/${lightId}/state`
-    const data = { on, bri, ct }
+    const data = { on, bri }
     try {
         return await axios.put(uri, data)
     } catch (error) {
         console.error(error)
     }
 }
+
+const lightIds = [1, 2, 3, 4]
+
+const turnOnAllLight = (isOn = false, bri = 254) => lightIds.map(id => {
+    controlLight(id, isOn, bri)
+})
+
+turnOnAllLight(true, 156)
